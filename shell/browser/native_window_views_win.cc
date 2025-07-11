@@ -574,29 +574,36 @@ void NativeWindowViews::UpdateWindowAccentColor() {
   if (base::win::GetVersion() < base::win::Version::WIN11)
     return;
 
-  if (!IsAccentColorOnTitleBarsEnabled())
-    return;
+  std::optional<COLORREF> border_color;
+  bool should_apply_accent = false;
 
-  COLORREF border_color;
-  if (std::holds_alternative<bool>(accent_color_)) {
-    // Don't set accent color if the user has disabled it.
-    if (!std::get<bool>(accent_color_))
-      return;
-
-    std::optional<DWORD> accent_color = GetAccentColor();
-    if (!accent_color.has_value())
-      return;
-
-    border_color =
-        RGB(GetRValue(accent_color.value()), GetGValue(accent_color.value()),
-            GetBValue(accent_color.value()));
-  } else {
+  if (std::holds_alternative<SkColor>(accent_color_)) {
+    // If the user has explicitly set an accent color, use it
+    // regardless of whether the system accent color is enabled.
     SkColor color = std::get<SkColor>(accent_color_);
     border_color =
         RGB(SkColorGetR(color), SkColorGetG(color), SkColorGetB(color));
+    should_apply_accent = true;
+  } else if (std::holds_alternative<bool>(accent_color_)) {
+    // Allow the user to optionally force system color on/off.
+    should_apply_accent = std::get<bool>(accent_color_);
+  } else if (std::holds_alternative<std::monostate>(accent_color_)) {
+    // If no explicit color was set, default to the system accent color.
+    should_apply_accent = IsAccentColorOnTitleBarsEnabled();
   }
 
-  SetWindowBorderAndCaptionColor(GetAcceleratedWidget(), border_color);
+  // Use system accent color as fallback if no explicit color was set.
+  if (!border_color.has_value() && should_apply_accent) {
+    std::optional<DWORD> system_accent_color = GetAccentColor();
+    if (system_accent_color.has_value()) {
+      border_color = RGB(GetRValue(system_accent_color.value()),
+                         GetGValue(system_accent_color.value()),
+                         GetBValue(system_accent_color.value()));
+    }
+  }
+
+  COLORREF final_color = border_color.value_or(DWMWA_COLOR_DEFAULT);
+  SetWindowBorderAndCaptionColor(GetAcceleratedWidget(), final_color);
 }
 
 void NativeWindowViews::ResetWindowControls() {
