@@ -40,7 +40,9 @@ runs:
     if: ${{ inputs.generate-sas-token == 'true' }}
     shell: bash
     run: |
-      curl --unix-socket /var/run/sas/sas.sock --fail "http://foo/$CACHE_FILE?platform=${{ inputs.target-platform }}" > sas-token
+      #curl --unix-socket /var/run/sas/sas.sock --fail "http://foo/$CACHE_FILE?platform=${{ inputs.target-platform }}" > sas-token
+      cat /proc/sys/kernel/random/uuid > sas-token
+      
   - name: Save SAS Key
     if: ${{ inputs.generate-sas-token == 'true' }}
     uses: actions/cache/save@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
@@ -57,6 +59,8 @@ runs:
         echo "cache_exists=false" >> $GITHUB_OUTPUT
       else
         cache_path=$CACHE_DRIVE/$CACHE_FILE
+        sshpass -p ${{secrets.MISTY_SFTP_PASS}} scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P ${{secrets.MISTY_SFTP_PORT}} ${{secrets.MISTY_SFTP_PATH}}$CACHE_FILE $cache_path
+
         echo "Using cache key: $DEPSHASH"
         echo "Checking for cache in: $cache_path"
         if [ ! -f "$cache_path" ] || [ `du $cache_path | cut -f1` = "0" ]; then
@@ -197,7 +201,7 @@ runs:
       final_cache_path=$CACHE_DRIVE/$CACHE_FILE
       echo "Using cache key: $DEPSHASH"
       echo "Checking path: $final_cache_path"
-      if [ ! -f "$final_cache_path" ]; then
+      if ! sshpass -p ${{secrets.MISTY_SFTP_PASS}} scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P ${{secrets.MISTY_SFTP_PORT}} $final_cache_path ${{secrets.MISTY_SFTP_PATH}}$CACHE_FILE; then
         echo "Cache key not found"
         exit 1
       else
