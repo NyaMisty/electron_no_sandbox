@@ -66,7 +66,7 @@ runs:
           chmod 0600 /tmp/mistysftpkey
           scp -s -i /tmp/mistysftpkey -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P "$MISTY_SFTP_PORT" "$MISTY_SFTP_PATH$CACHE_FILE" "$cache_path"
         }
-        doDownload
+        doDownload || true
 
         echo "Using cache key: $DEPSHASH"
         echo "Checking for cache in: $cache_path"
