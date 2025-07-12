@@ -25,6 +25,7 @@ jobs:
       options: --user root --privileged
       volumes:
         - /mnt/cross-instance-cache:/mnt/cross-instance-cache
+        - /mnt/workdir_tmp:/__w
         - /var/run/sas:/var/run/sas
     env:
       CHROMIUM_GIT_COOKIE: ${{ secrets.CHROMIUM_GIT_COOKIE }}
