@@ -43,7 +43,8 @@ jobs:
     - name: Checkout & Sync & Save
       uses: ./src/electron/.github/actions/checkout
       with:
-        generate-sas-token: 'true'
+        #generate-sas-token: 'true'
+        generate-sas-token: 'false'
         target-platform: win
 
   publish-x64-win:
