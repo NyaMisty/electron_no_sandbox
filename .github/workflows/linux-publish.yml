@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/electron/build:${{ inputs.build-image-sha }}
-      options: --user root
+      options: --user root --privileged
       volumes:
         - /mnt/cross-instance-cache:/mnt/cross-instance-cache
         - /var/run/sas:/var/run/sas
@@ -31,8 +31,8 @@ jobs:
       GCLIENT_EXTRA_ARGS: '--custom-var=checkout_arm=True --custom-var=checkout_arm64=True'
     steps:
     - run: |
-        mkdir -p /mnt/pivot_home
-        mount -o bind /mnt/pivot_home .
+        sudo mkdir -p /mnt/pivot_home
+        sudo mount -o bind /mnt/pivot_home .
     - name: Checkout Electron
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       with:
