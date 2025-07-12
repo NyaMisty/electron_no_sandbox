@@ -206,6 +206,7 @@ runs:
       echo "Checking path: $final_cache_path"
 
       function doUpload() {
+        set -x
         #sshpass -p $MISTY_SFTP_PASS scp -s -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P $MISTY_SFTP_PORT $final_cache_path $MISTY_SFTP_PATH$CACHE_FILE
         echo -e "$MISTY_SFTP_KEY" > /tmp/mistysftpkey
         chmod 0600 /tmp/mistysftpkey
