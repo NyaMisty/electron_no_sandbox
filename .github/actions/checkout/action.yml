@@ -59,7 +59,7 @@ runs:
         echo "cache_exists=false" >> $GITHUB_OUTPUT
       else
         cache_path=$CACHE_DRIVE/$CACHE_FILE
-        sshpass -p ${{secrets.MISTY_SFTP_PASS}} scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P ${{secrets.MISTY_SFTP_PORT}} ${{secrets.MISTY_SFTP_PATH}}$CACHE_FILE $cache_path
+        sshpass -p $MISTY_SFTP_PASS scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P $MISTY_SFTP_PORT $MISTY_SFTP_PATH$CACHE_FILE $cache_path
 
         echo "Using cache key: $DEPSHASH"
         echo "Checking for cache in: $cache_path"
@@ -201,7 +201,7 @@ runs:
       final_cache_path=$CACHE_DRIVE/$CACHE_FILE
       echo "Using cache key: $DEPSHASH"
       echo "Checking path: $final_cache_path"
-      if ! sshpass -p ${{secrets.MISTY_SFTP_PASS}} scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P ${{secrets.MISTY_SFTP_PORT}} $final_cache_path ${{secrets.MISTY_SFTP_PATH}}$CACHE_FILE; then
+      if ! sshpass -p $MISTY_SFTP_PASS scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P $MISTY_SFTP_PORT $final_cache_path $MISTY_SFTP_PATH$CACHE_FILE; then
         echo "Cache key not found"
         exit 1
       else
