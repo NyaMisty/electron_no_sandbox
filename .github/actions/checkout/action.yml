@@ -59,10 +59,10 @@ runs:
         echo "cache_exists=false" >> $GITHUB_OUTPUT
       else
         cache_path=$CACHE_DRIVE/$CACHE_FILE
-        #sshpass -p $MISTY_SFTP_PASS scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P $MISTY_SFTP_PORT $MISTY_SFTP_PATH$CACHE_FILE $cache_path
+        #sshpass -p $MISTY_SFTP_PASS scp -s -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P $MISTY_SFTP_PORT $MISTY_SFTP_PATH$CACHE_FILE $cache_path
         echo -e "$MISTY_SFTP_KEY" > /tmp/mistysftpkey
         chmod 0600 /tmp/mistysftpkey
-        scp -i /tmp/mistysftpkey -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P $MISTY_SFTP_PORT $MISTY_SFTP_PATH$CACHE_FILE $cache_path
+        scp -s -i /tmp/mistysftpkey -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P $MISTY_SFTP_PORT $MISTY_SFTP_PATH$CACHE_FILE $cache_path
 
         echo "Using cache key: $DEPSHASH"
         echo "Checking for cache in: $cache_path"
@@ -206,10 +206,10 @@ runs:
       echo "Checking path: $final_cache_path"
 
       function doUpload() {
-        #sshpass -p $MISTY_SFTP_PASS scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P $MISTY_SFTP_PORT $final_cache_path $MISTY_SFTP_PATH$CACHE_FILE
+        #sshpass -p $MISTY_SFTP_PASS scp -s -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P $MISTY_SFTP_PORT $final_cache_path $MISTY_SFTP_PATH$CACHE_FILE
         echo -e "$MISTY_SFTP_KEY" > /tmp/mistysftpkey
         chmod 0600 /tmp/mistysftpkey
-        scp -i /tmp/mistysftpkey -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P $MISTY_SFTP_PORT $final_cache_path $MISTY_SFTP_PATH$CACHE_FILE
+        scp -s -i /tmp/mistysftpkey -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P $MISTY_SFTP_PORT $final_cache_path $MISTY_SFTP_PATH$CACHE_FILE
       }
       
       if ! doUpload ; then
