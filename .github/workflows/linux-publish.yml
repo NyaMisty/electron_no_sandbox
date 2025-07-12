@@ -27,14 +27,16 @@ jobs:
         - /mnt/cross-instance-cache:/mnt/cross-instance-cache
         - /mnt/workdir_tmp:/__w/electron_no_sandbox
         # - /home/runner/work/electron_no_sandbox/electron_no_sandbox/src:/__w/electron_no_sandbox/electron_no_sandbox/src
+        - /home/runner/work:/__w_ori
         - /var/run/sas:/var/run/sas
     env:
       CHROMIUM_GIT_COOKIE: ${{ secrets.CHROMIUM_GIT_COOKIE }}
       GCLIENT_EXTRA_ARGS: '--custom-var=checkout_arm=True --custom-var=checkout_arm64=True'
     steps:
     - run: |
-        mkdir -p /mnt/workdir_tmp/electron_no_sandbox/src
-        ln -sf /mnt/workdir_tmp/electron_no_sandbox/src ./src
+        mkdir -p /__w_ori/electron_no_sandbox/electron_no_sandbox
+        rm -rf /__w_ori/electron_no_sandbox/electron_no_sandbox/src
+        ln -sf /mnt/workdir_tmp/electron_no_sandbox/src /__w_ori/electron_no_sandbox/electron_no_sandbox/src
     - name: Checkout Electron
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       with:
