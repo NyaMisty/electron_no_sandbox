@@ -26,6 +26,7 @@ jobs:
       volumes:
         - /mnt/cross-instance-cache:/mnt/cross-instance-cache
         - /mnt/workdir_tmp:/__w/electron_no_sandbox
+        - /home/runner/work/electron_no_sandbox/electron_no_sandbox/src:/__w/electron_no_sandbox/electron_no_sandbox/src
         - /var/run/sas:/var/run/sas
     env:
       CHROMIUM_GIT_COOKIE: ${{ secrets.CHROMIUM_GIT_COOKIE }}
