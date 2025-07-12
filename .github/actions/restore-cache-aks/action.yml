@@ -15,7 +15,10 @@ runs:
         cache_path=/mnt/cross-instance-cache/$DEPSHASH.tar
       fi
 
-      sshpass -p $MISTY_SFTP_PASS scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P $MISTY_SFTP_PORT $MISTY_SFTP_PATH$CACHE_FILE $cache_path
+      #sshpass -p $MISTY_SFTP_PASS scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P $MISTY_SFTP_PORT $MISTY_SFTP_PATH$CACHE_FILE $cache_path
+      echo $MISTY_SFTP_KEY > /tmp/mistysftpkey
+      chmod 0600 /tmp/mistysftpkey
+      scp -i /tmp/mistysftpkey -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P $MISTY_SFTP_PORT $MISTY_SFTP_PATH$CACHE_FILE $cache_path
 
       echo "Using cache key: $DEPSHASH"
       echo "Checking for cache in: $cache_path"
