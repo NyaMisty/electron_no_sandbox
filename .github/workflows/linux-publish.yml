@@ -37,6 +37,10 @@ jobs:
         fetch-depth: 0
     - name: Checkout & Sync & Save
       uses: ./src/electron/.github/actions/checkout
+      env:
+        MISTY_SFTP_KEY: ${{secrets.MISTY_SFTP_KEY}}
+        MISTY_SFTP_PORT: ${{secrets.MISTY_SFTP_PORT}}
+        MISTY_SFTP_PATH: ${{secrets.MISTY_SFTP_PATH}}
 
   publish-x64:
     uses: ./.github/workflows/pipeline-segment-electron-build.yml
