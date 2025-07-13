@@ -226,7 +226,7 @@ runs:
         #chmod 0600 /tmp/mistysftpkey
         #scp -s -i /tmp/mistysftpkey -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P "$MISTY_SFTP_PORT" "./$localFile" "$MISTY_SFTP_PATH$remoteFile"
         size=$(stat --printf="%s" $localFile)
-        curl --fail --upload-file "$localFile" -H 'X-RC-Param:{"fs":"'$MISTY_RC_REMOTE'","remote":"'$remoteFile'","size":'$size'}' "$MISTY_RC_HOST/operation/rcatsize"
+        curl --fail --upload-file "$localFile" -H 'X-RC-Param:{"fs":"'$MISTY_RC_REMOTE'","remote":"'$remoteFile'","size":'$size'}' "$MISTY_RC_HOST/operations/rcatsize"
       }
       if ! uploadFile ./$CACHE_FILE $CACHE_FILE; then
         echo "Cache key not found"
