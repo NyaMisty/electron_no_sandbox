@@ -79,7 +79,7 @@ runs:
         echo "Using cache key: $DEPSHASH"
         echo "Checking for cache in: $cache_path"
         #if [ ! -f "$cache_path" ] || [ `du $cache_path | cut -f1` = "0" ]; then
-        if checkFile "$CACHE_FILE"; then
+        if ! checkFile "$CACHE_FILE"; then
           echo "cache_exists=false" >> $GITHUB_OUTPUT
           echo "Cache Does Not Exist for $DEPSHASH"
         else
