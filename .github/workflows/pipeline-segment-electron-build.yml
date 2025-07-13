@@ -146,6 +146,8 @@ jobs:
         MISTY_SFTP_KEY: ${{secrets.MISTY_SFTP_KEY}}
         MISTY_SFTP_PORT: ${{secrets.MISTY_SFTP_PORT}}
         MISTY_SFTP_PATH: ${{secrets.MISTY_SFTP_PATH}}
+        MISTY_RC_HOST: ${{secrets.MISTY_RC_HOST}}
+        MISTY_RC_REMOTE: ${{secrets.MISTY_RC_REMOTE}}
     - name: Restore src cache via AKS
       if: ${{ inputs.target-platform == 'linux' }}
       uses: ./src/electron/.github/actions/restore-cache-aks
@@ -153,6 +155,8 @@ jobs:
         MISTY_SFTP_KEY: ${{secrets.MISTY_SFTP_KEY}}
         MISTY_SFTP_PORT: ${{secrets.MISTY_SFTP_PORT}}
         MISTY_SFTP_PATH: ${{secrets.MISTY_SFTP_PATH}}
+        MISTY_RC_HOST: ${{secrets.MISTY_RC_HOST}}
+        MISTY_RC_REMOTE: ${{secrets.MISTY_RC_REMOTE}}
     - name: Checkout Electron
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       with:
