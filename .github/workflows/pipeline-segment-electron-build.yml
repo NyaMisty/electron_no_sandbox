@@ -142,9 +142,17 @@ jobs:
       uses: ./src/electron/.github/actions/restore-cache-azcopy
       with:
         target-platform: ${{ inputs.target-platform }}
+      env:
+        MISTY_SFTP_KEY: ${{secrets.MISTY_SFTP_KEY}}
+        MISTY_SFTP_PORT: ${{secrets.MISTY_SFTP_PORT}}
+        MISTY_SFTP_PATH: ${{secrets.MISTY_SFTP_PATH}}
     - name: Restore src cache via AKS
       if: ${{ inputs.target-platform == 'linux' }}
       uses: ./src/electron/.github/actions/restore-cache-aks
+      env:
+        MISTY_SFTP_KEY: ${{secrets.MISTY_SFTP_KEY}}
+        MISTY_SFTP_PORT: ${{secrets.MISTY_SFTP_PORT}}
+        MISTY_SFTP_PATH: ${{secrets.MISTY_SFTP_PATH}}
     - name: Checkout Electron
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       with:
