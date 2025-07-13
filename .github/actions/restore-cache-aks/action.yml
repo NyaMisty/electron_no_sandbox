@@ -15,10 +15,16 @@ runs:
         cache_path=/mnt/cross-instance-cache/$DEPSHASH.tar
       fi
 
-      #sshpass -p $MISTY_SFTP_PASS scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P $MISTY_SFTP_PORT $MISTY_SFTP_PATH$CACHE_FILE $cache_path
-      echo -e "$MISTY_SFTP_KEY" > /tmp/mistysftpkey
-      chmod 0600 /tmp/mistysftpkey
-      scp -s -i /tmp/mistysftpkey -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P "$MISTY_SFTP_PORT" "$MISTY_SFTP_PATH$DEPSHASH.tar" "$cache_path"
+      function downloadFile() {
+        remotePath=$1
+        localFile=$2
+        #sshpass -p $MISTY_SFTP_PASS scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P $MISTY_SFTP_PORT $MISTY_SFTP_PATH$remotePath $localFile
+        #echo -e "$MISTY_SFTP_KEY" > /tmp/mistysftpkey
+        #chmod 0600 /tmp/mistysftpkey
+        #scp -s -i /tmp/mistysftpkey -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P "$MISTY_SFTP_PORT" "$MISTY_SFTP_PATH$remotePath" "$localFile"
+        curl --fail -o "$localFile" "$MISTY_RC_HOST/\[$MISTY_RC_REMOTE\]/$remotePath"
+      }
+      downloadFile "$DEPSHASH.tar" "$cache_path"
 
       echo "Using cache key: $DEPSHASH"
       echo "Checking for cache in: $cache_path"
