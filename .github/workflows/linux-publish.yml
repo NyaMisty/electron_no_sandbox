@@ -39,7 +39,8 @@ jobs:
     - run: |
         mkdir -p /__w/electron_no_sandbox/electron_no_sandbox
         mkdir -p /__w_ori/electron_no_sandbox/electron_no_sandbox
-        mv /__w_ori/electron_no_sandbox/electron_no_sandbox/{,.[^.]}* /__w/electron_no_sandbox/electron_no_sandbox
+        #mv /__w_ori/electron_no_sandbox/electron_no_sandbox/{,.[^.]}* /__w/electron_no_sandbox/electron_no_sandbox
+        find /__w_ori/electron_no_sandbox/electron_no_sandbox -mindepth 1 -maxdepth 1 -exec mv -t /__w/electron_no_sandbox/electron_no_sandbox -- {} +
         rm -rf /__w_ori/electron_no_sandbox/electron_no_sandbox/src
         ln -sf /mnt/workdir_tmp/electron_no_sandbox/src /__w_ori/electron_no_sandbox/electron_no_sandbox/src
     # method2: link to correct place both outside docker AND in docker (that makes tar not happy)
