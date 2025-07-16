@@ -25,23 +25,28 @@ jobs:
       options: --user root --privileged
       volumes:
         - /mnt/cross-instance-cache:/mnt/cross-instance-cache
-        # - /mnt/workdir_tmp:/__w/electron_no_sandbox
-        # - /home/runner/work/electron_no_sandbox/electron_no_sandbox/src:/__w/electron_no_sandbox/electron_no_sandbox/src
-        # - /home/runner/work:/__w_ori
-        - /mnt/workdir_tmp:/mnt/workdir_tmp
+        # corresponds to method1
+        - /mnt/workdir_tmp:/__w/electron_no_sandbox
+        - /home/runner/work:/__w_ori
+        # # corresponds to method2
+        # - /mnt/workdir_tmp:/mnt/workdir_tmp
         - /var/run/sas:/var/run/sas
     env:
       CHROMIUM_GIT_COOKIE: ${{ secrets.CHROMIUM_GIT_COOKIE }}
       GCLIENT_EXTRA_ARGS: '--custom-var=checkout_arm=True --custom-var=checkout_arm64=True'
     steps:
-    # - run: |
-    #     mkdir -p /__w_ori/electron_no_sandbox/electron_no_sandbox
-    #     rm -rf /__w_ori/electron_no_sandbox/electron_no_sandbox/src
-    #     ln -sf /mnt/workdir_tmp/electron_no_sandbox/src /__w_ori/electron_no_sandbox/electron_no_sandbox/src
+    # method1: link to correct place outside docker, but not in docker
     - run: |
-        mkdir -p /__w/electron_no_sandbox
-        rm -rf /__w/electron_no_sandbox/electron_no_sandbox
-        ln -sf /mnt/workdir_tmp /__w/electron_no_sandbox/electron_no_sandbox
+        mkdir -p /__w/electron_no_sandbox/electron_no_sandbox
+        mkdir -p /__w_ori/electron_no_sandbox/electron_no_sandbox
+        mv /__w_ori/electron_no_sandbox/electron_no_sandbox/. /__w/electron_no_sandbox/electron_no_sandbox/
+        rm -rf /__w_ori/electron_no_sandbox/electron_no_sandbox/src
+        ln -sf /mnt/workdir_tmp/electron_no_sandbox/src /__w_ori/electron_no_sandbox/electron_no_sandbox/src
+    # method2: link to correct place both outside docker AND in docker (that makes tar not happy)
+    # - run: |
+    #     mkdir -p /__w/electron_no_sandbox
+    #     rm -rf /__w/electron_no_sandbox/electron_no_sandbox
+    #     ln -sf /mnt/workdir_tmp /__w/electron_no_sandbox/electron_no_sandbox
     - name: Checkout Electron
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       with:
