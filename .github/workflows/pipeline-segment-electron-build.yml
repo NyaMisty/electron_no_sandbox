@@ -89,6 +89,7 @@ jobs:
       run: |
         p="$(realpath .)"
         rm -rf "$p"
+        mkdir -p /mnt/workdir
         ln -sf /mnt/workdir "$p"
         echo $p
         ls -al "$p"
