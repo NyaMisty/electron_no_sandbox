@@ -87,9 +87,10 @@ jobs:
     steps:
     - name: Create src dir
       run: |
-        #mkdir src
         mkdir /mnt/src
         ln -sf /mnt/src src
+        ls -al "$(realpath .)"
+        fintmnt
     - name: Checkout Electron
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       with:
