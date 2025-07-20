@@ -190,7 +190,7 @@ jobs:
       run: echo "CHROMIUM_BUILDTOOLS_PATH=$(pwd)/src/buildtools" >> $GITHUB_ENV
     - name: Setup Number of Ninja Processes
       run: |
-        echo "NUMBER_OF_NINJA_PROCESSES=${{ inputs.target-platform != 'macos' && '300' || '200' }}" >> $GITHUB_ENV
+        echo "NUMBER_OF_NINJA_PROCESSES=${{ inputs.target-platform != 'macos' && '4' || '3' }}" >> $GITHUB_ENV
     - name: Free up space (macOS)
       if: ${{ inputs.target-platform == 'macos' }}
       uses: ./src/electron/.github/actions/free-space-macos
